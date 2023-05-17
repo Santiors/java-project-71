@@ -5,42 +5,28 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-@Command(
-        name = "gendiff",
-        description = "Compares two configuration files and shows a difference."
-)
-public class App implements Runnable {
+import java.util.concurrent.Callable;
 
-    @Option(names = {"-f", "--format"}, description = "output format [default: stylish]")
-    private String format = "stylish";
+    @Command(name = "gendiff", mixinStandardHelpOptions = true, version = "gendiff 1.0",
+            description = "Compares two configuration files and shows a difference.")
+    public class App implements Callable<Integer> {
+        public static void main(String[] args) {
+            System.out.println("Hello World!");
+            int exitCode = new CommandLine(new App()).execute(args);
+            System.exit(exitCode);
+        }
 
-    @Parameters(description = "path to first file")
-    private String filepath1;
+        @Option(names = {"-f", "--format"}, paramLabel = "format", description = "output format [default: stylish]")
+        private String format;
 
-    @Parameters(description = "path to second file")
-    private String filepath2;
+        @Parameters(index = "0", paramLabel = "filepath1", description = "path to first file")
+        private String filePath1;
 
-    @Option(names = {"-h", "--help"}, description = "Show this help message and exit.", help = true)
-    private boolean helpRequested;
+        @Parameters(index = "1", paramLabel = "filepath2", description = "path to second file")
+        private String filePath2;
 
-    @Option(names = {"-V", "--version"}, description = "Print version information and exit.")
-    private boolean versionRequested;
-
-    @Override
-    public void run() {
-        if (helpRequested) {
-            CommandLine.usage(this, System.out);
-        } else if (versionRequested) {
-            System.out.println("Version 1.0");
-        } else {
-//            System.out.println("Comparing configuration files...");
-//            System.out.println("Format: " + format);
-//            System.out.println("Filepath 1: " + filepath1);
-//            System.out.println("Filepath 2: " + filepath2);
+        @Override
+        public Integer call() throws Exception {
+            return 0;
         }
     }
-
-    public static void main(String[] args) {
-        CommandLine.run(new App(), args);
-    }
-}
